@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Lumora — Studio Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LOGIN / CLIENT AUTH -->
+<section id="loginPage" class="login-page">
+  <div class="login-visual">
+    <div class="login-overlay"></div>
+    <div class="login-brand">LUMORA<span>•</span></div>
+    <div class="login-message">
+      <p class="eyebrow">PHOTOGRAPHY STUDIO MANAGEMENT</p>
+      <h1>Every story deserves<br><em>beautiful light.</em></h1>
+      <p>A refined workspace for clients, photographers and studio administration.</p>
+      <div class="mini-gallery"><span></span><span></span><span></span></div>
+    </div>
+    <div class="login-credit">WEDDINGS • PORTRAITS • EDITORIAL • EVENTS</div>
+  </div>
+  <div class="login-panel">
+    <button class="theme-toggle floating-theme" id="loginTheme" type="button">☾ <span>Dark</span></button>
+    <div class="login-box">
+      <p class="eyebrow" id="authEyebrow">WELCOME BACK</p>
+      <h2 id="authTitle">Sign in to Lumora</h2>
+      <p class="muted">Choose your role and enter your studio workspace.</p>
+      <div class="role-grid">
+        <button class="role-card selected" data-role="admin"><span>⌂</span><b>Admin</b><small>Studio control</small></button>
+        <button class="role-card" data-role="photographer"><span>◉</span><b>Photographer</b><small>Your assignments</small></button>
+        <button class="role-card" data-role="client"><span>○</span><b>Client</b><small>Your bookings</small></button>
+      </div>
+
+      <div id="clientAuthTabs" class="auth-tabs hidden">
+        <button class="auth-tab active" data-auth="login">Login</button>
+        <button class="auth-tab" data-auth="register">Create Account</button>
+      </div>
+
+      <label class="field-label">Name<input id="loginName" placeholder="Your name" value="Pavan Teja"></label>
+      <label class="field-label">Email<input id="loginEmail" type="email" placeholder="Email address" value="admin@lumora.com"></label>
+      <label class="field-label" id="passwordField">Password<input id="loginPassword" type="password" placeholder="Demo password"></label>
+      <button class="gold-btn wide" id="loginBtn">Enter Lumora →</button>
+      <small class="login-hint" id="authHint">Demo project • No backend required</small>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">L</span><div><b>LUMORA</b><small>STUDIO</small></div></div>
+    <div class="user-card"><div id="userAvatar">PT</div><div><b id="userName">Pavan Teja</b><small id="userRole">ADMIN</small></div></div>
+    <nav id="sideNav"></nav>
+    <div class="sidebar-bottom"><span>EST. 2026</span><button id="logout">Log out</button></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><p class="eyebrow" id="crumb">LUMORA / ADMIN</p><h1 id="pageTitle">Dashboard</h1></div>
+      <div class="top-actions"><span class="live">● SYSTEM ONLINE</span><button class="theme-toggle" id="appTheme" type="button">☾ <span>Dark</span></button><div class="top-avatar" id="topAvatar">PT</div></div>
+    </header>
+
+    <!-- ADMIN -->
+    <section class="screen" id="adminDashboard">
+      <div class="dashboard-hero admin-hero"><div><p class="eyebrow">ADMIN CONTROL CENTER</p><h2>Good morning, <em id="adminGreeting">Pavan.</em></h2><p>Everything your studio needs, in one place.</p></div><button class="gold-btn" onclick="openModal('bookingModal')">+ New Booking</button></div>
+      <div class="stat-grid">
+        <article><small>TOTAL BOOKINGS</small><strong id="aTotal">0</strong><span>All studio sessions</span></article>
+        <article><small>PENDING</small><strong id="aPending">0</strong><span>Need attention</span></article>
+        <article><small>PHOTOGRAPHERS</small><strong>8</strong><span>Active team</span></article>
+        <article><small>CLIENTS</small><strong id="aClients">0</strong><span>Registered clients</span></article>
+      </div>
+      <div class="section-head"><div><p class="eyebrow">TODAY'S WORKFLOW</p><h3>Recent bookings</h3></div></div>
+      <div class="table-card"><table><thead><tr><th>CLIENT</th><th>SESSION</th><th>PHOTOGRAPHER</th><th>DATE</th><th>STATUS</th></tr></thead><tbody id="adminRows"></tbody></table></div>
+    </section>
+
+    <section class="screen hidden" id="adminBookings">
+      <div class="section-head"><div><p class="eyebrow">BOOKING MANAGEMENT</p><h2>All bookings</h2></div><button class="gold-btn" onclick="openModal('bookingModal')">+ New Booking</button></div>
+      <div class="toolbar"><input id="adminSearch" placeholder="Search client or session..." oninput="renderAdminBookings()"><select id="adminFilter" onchange="renderAdminBookings()"><option>All</option><option>Pending</option><option>Confirmed</option><option>Completed</option></select></div>
+      <div class="table-card"><table><thead><tr><th>CLIENT</th><th>SESSION</th><th>PHOTOGRAPHER</th><th>DATE</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="allRows"></tbody></table></div>
+    </section>
+
+    <section class="screen hidden" id="adminPhotographers">
+      <div class="section-head"><div><p class="eyebrow">TEAM MANAGEMENT</p><h2>Photographers</h2></div><button class="gold-btn" onclick="showToast('Photographer record ready to add')">+ Add Photographer</button></div>
+      <div class="photo-strip team-strip"><div><p class="eyebrow">THE LUMORA TEAM</p><h3>People behind the frame.</h3></div></div>
+      <div class="people-grid" id="photographerGrid"></div><p class="helper-text">Click a photographer to see their current, pending and completed client work.</p>
+    </section>
+
+    <section class="screen hidden" id="adminClients">
+      <div class="section-head"><div><p class="eyebrow">CLIENT RECORDS</p><h2>Clients</h2></div></div>
+      <div class="photo-strip client-strip"><div><p class="eyebrow">CLIENT EXPERIENCE</p><h3>Every session, thoughtfully managed.</h3></div></div>
+      <div class="people-grid" id="clientGrid"></div><p class="helper-text">Click a client to see their assigned photographers and booking history.</p>
+      <div class="assignment-panel"><div><p class="eyebrow">WORKFLOW</p><h3>Assign photographer to client</h3><p class="muted">Choose a client and photographer. The assignment appears in both workspaces.</p></div><div class="assignment-controls"><select id="assignClient"></select><select id="assignPhotographer"><option>Alex Kapoor</option><option>Maya Singh</option><option>Rohan Verma</option><option>Diya Sharma</option><option>Vihaan Nair</option><option>Riya Shah</option></select><button class="gold-btn" onclick="assignPhotographer()">Assign Photographer</button></div></div>
+    </section>
+
+    <section class="screen hidden" id="adminReports">
+      <div class="section-head"><div><p class="eyebrow">REPORTING</p><h2>Studio reports</h2></div></div>
+      <div class="report-grid"><article class="report-card"><p>BOOKING STATUS</p><div class="report-line"><span>Pending</span><b id="rPending"></b></div><div class="report-line"><span>Confirmed</span><b id="rConfirmed"></b></div><div class="report-line"><span>Completed</span><b id="rCompleted"></b></div></article><article class="report-card dark"><p>STUDIO SUMMARY</p><h3 id="reportSummary">0 sessions</h3><span>Use these reports to monitor workflow and studio performance.</span></article></div>
+    </section>
+
+    <!-- PHOTOGRAPHER -->
+    <section class="screen hidden" id="photographerHome">
+      <div class="dashboard-hero photographer-hero"><div><p class="eyebrow">PHOTOGRAPHER WORKSPACE</p><h2>Welcome, <em id="photoGreeting">Alex.</em></h2><p>Your assignments, schedule and client work in one place.</p></div><button class="gold-btn" onclick="showScreen('photographerProfile','Profile')">View Profile</button></div>
+      <div class="stat-grid two"><article><small>ASSIGNED</small><strong id="pAssigned">0</strong><span>Your sessions</span></article><article><small>COMPLETED</small><strong id="pCompleted">0</strong><span>Finished work</span></article><article><small>CLIENTS</small><strong id="pClients">0</strong><span>Active relationships</span></article><article><small>AVAILABILITY</small><strong>OPEN</strong><span>Next available slot</span></article></div>
+      <div class="workspace-grid"><div><div class="section-head"><div><p class="eyebrow">MY ASSIGNMENTS</p><h3>Upcoming sessions</h3></div></div><div id="photoAssignments" class="assignment-list"></div></div><div class="side-feature"><p class="eyebrow">YOUR STYLE</p><h3>Portraits with intention.</h3><p>Keep every assignment organized from client brief to final delivery.</p></div></div>
+    </section>
+
+    <section class="screen hidden" id="photographerProfile">
+      <div class="profile-hero photo-profile"><div class="profile-avatar large">AK</div><div><p class="eyebrow">PHOTOGRAPHER PROFILE</p><h2>Alex Kapoor</h2><p>Portrait & Editorial Photographer</p></div></div>
+      <div class="profile-meta large-meta"><span>8 assignments</span><span>4.9 client rating</span><span>Available</span></div>
+      <div class="profile-columns"><article><p class="eyebrow">SPECIALITIES</p><h3>Portrait • Editorial • Fashion</h3><p class="muted">A clean workspace for assignments, client communication and session tracking.</p></article><article><p class="eyebrow">CURRENT STATUS</p><h3>Available for new sessions</h3><p class="muted">Your next booking can be assigned by the studio admin.</p></article></div>
+    </section>
+
+    <!-- CLIENT -->
+    <section class="screen hidden" id="clientHome">
+      <div class="dashboard-hero client-hero"><div><p class="eyebrow">CLIENT PORTAL</p><h2>Your moments,<br><em>beautifully managed.</em></h2><p>View your sessions, booking status, assigned photographers and studio updates.</p></div><button class="gold-btn" onclick="openModal('clientBookingModal')">Request a Session</button></div>
+      <div class="stat-grid two"><article><small>MY SESSIONS</small><strong id="cTotal">0</strong><span>Total requests</span></article><article><small>UPCOMING</small><strong id="cUpcoming">0</strong><span>Pending or confirmed</span></article><article><small>COMPLETED</small><strong id="cCompleted">0</strong><span>Finished sessions</span></article><article><small>PHOTOGRAPHERS</small><strong id="cPhotographers">0</strong><span>Assigned to you</span></article></div>
+      <div class="workspace-grid"><div><div class="section-head"><div><p class="eyebrow">MY BOOKINGS</p><h3>Your sessions</h3></div></div><div id="clientBookings" class="client-bookings"></div></div><div class="side-feature client-note"><p class="eyebrow">YOUR EXPERIENCE</p><h3>From first idea to final frame.</h3><p>Send a session request and the studio team will take care of the rest.</p><button class="outline-btn" onclick="openModal('clientBookingModal')">Plan a session</button></div></div>
+    </section>
+
+    <section class="screen hidden" id="clientProfile">
+      <div class="profile-hero client-profile"><div class="profile-avatar large" id="clientProfileAvatar">PT</div><div><p class="eyebrow">CLIENT PROFILE</p><h2 id="clientProfileName">Pavan Teja</h2><p>Premium Client</p></div></div>
+      <div class="profile-meta large-meta"><span>Member since 2026</span><span id="profileSessionCount">0 sessions</span><span>Priority support</span></div>
+      <div class="profile-columns"><article><p class="eyebrow">CONTACT</p><h3 id="clientProfileEmail">pavan@lumora.com</h3><p class="muted">Your account details are stored locally for this demo project.</p></article><article><p class="eyebrow">PREFERENCES</p><h3>Photography & events</h3><p class="muted">Use your dashboard to request portraits, weddings, fashion or event sessions.</p></article></div>
+    </section>
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="modal" id="bookingModal"><form class="modal-box" onsubmit="saveAdminBooking(event)"><button type="button" class="close" onclick="closeModal('bookingModal')">×</button><p class="eyebrow">NEW RECORD</p><h2>Create booking</h2><label>Client name<input id="bName" required placeholder="Client name"></label><label>Session<select id="bService"><option>Portrait</option><option>Wedding</option><option>Fashion</option><option>Event</option><option>Product</option></select></label><label>Photographer<select id="bPhoto"><option>Alex Kapoor</option><option>Maya Singh</option><option>Rohan Verma</option><option>Diya Sharma</option></select></label><label>Date<input id="bDate" type="date" required></label><button class="gold-btn" type="submit">Create Booking</button></form></div>
+
+<div class="modal" id="clientBookingModal"><form class="modal-box" onsubmit="saveClientBooking(event)"><button type="button" class="close" onclick="closeModal('clientBookingModal')">×</button><p class="eyebrow">SESSION REQUEST</p><h2>Tell us your vision.</h2><label>Session type<select id="cService"><option>Portrait</option><option>Wedding</option><option>Fashion</option><option>Event</option><option>Product</option></select></label><label>Preferred date<input id="cDate" type="date" required></label><button class="gold-btn" type="submit">Send Request</button></form></div>
+
+<div class="modal" id="confirmModal"><div class="modal-box confirm-box"><button type="button" class="close" onclick="closeModal('confirmModal')">×</button><p class="eyebrow">CONFIRM ACTION</p><h2>Confirm booking?</h2><p id="confirmText" class="muted"></p><div class="confirm-actions"><button class="cancel-btn" onclick="closeModal('confirmModal')">Cancel</button><button class="gold-btn" id="confirmYes">Confirm</button></div></div></div>
+
+<div class="modal" id="photographerDetailsModal"><div class="modal-box detail-box"><button type="button" class="close" onclick="closeModal('photographerDetailsModal')">×</button><p class="eyebrow">PHOTOGRAPHER WORKLOAD</p><h2 id="detailPhotographerName">Alex Kapoor</h2><p id="detailPhotographerRole" class="muted"></p><div class="detail-stats"><div><small>CURRENT</small><strong id="photoCurrent">0</strong></div><div><small>PENDING</small><strong id="photoPending">0</strong></div><div><small>COMPLETED</small><strong id="photoCompleted">0</strong></div></div><div id="photoDetailList" class="detail-list"></div></div></div>
+
+<div class="modal" id="clientDetailsModal"><div class="modal-box detail-box"><button type="button" class="close" onclick="closeModal('clientDetailsModal')">×</button><p class="eyebrow">CLIENT WORKFLOW</p><h2 id="detailClientName">Client</h2><div class="detail-stats"><div><small>SESSIONS</small><strong id="clientSessions">0</strong></div><div><small>PHOTOGRAPHERS</small><strong id="clientPhotographers">0</strong></div><div><small>PENDING</small><strong id="clientPending">0</strong></div></div><div id="clientDetailList" class="detail-list"></div></div></div>
+
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
